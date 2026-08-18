@@ -4,7 +4,8 @@ package cinema.movies.model;
 
 import java.sql.Date;
 
-import org.hibernate.annotations.Temporal;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
