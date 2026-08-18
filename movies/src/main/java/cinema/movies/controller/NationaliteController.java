@@ -1,61 +1,60 @@
 package cinema.movies.controller;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.*;
-
+ 
 import cinema.movies.model.Nationalite;
-import cinema.movies.repository.NationaliteRepository;
-
+import cinema.movies.service.NationaliteService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+ 
+import java.util.List;
+import java.util.Optional;
+ 
 @RestController
-@RequestMapping("/nationalites")
-@CrossOrigin("http://localhost:4200")
+@RequestMapping("/api/nationalites")
+@CrossOrigin(origins = "http://localhost:4200")
 public class NationaliteController {
-
-    @Autowired
-    private NationaliteRepository repository;
-
+    private final NationaliteService nationaliteService;
+ 
+    public NationaliteController(NationaliteService nationaliteService) {
+        this.nationaliteService = nationaliteService;
+    }
+ 
     @GetMapping
-    public Page<Nationalite> getAll(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-
-        return repository.findAll(PageRequest.of(page, size));
+    public ResponseEntity<List<Nationalite>> getAll() {
+        return ResponseEntity.ok(nationaliteService.findAll());
     }
-
+ 
     @GetMapping("/{id}")
-    public Nationalite getById(@PathVariable Long id) {
-        return repository.findById(id).orElse(null);
+    public ResponseEntity<Nationalite> getById(@PathVariable Long id) {
+        Optional<Nationalite> nationalite = nationaliteService.findById(id);
+        return nationalite.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+ 
     @PostMapping
-    public Nationalite create(@RequestBody Nationalite nationalite) {
-        return repository.save(nationalite);
+    public ResponseEntity<Nationalite> create(@RequestBody Nationalite nationalite) {
+        Nationalite saved = nationaliteService.save(nationalite);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
-
+ 
     @PutMapping("/{id}")
-    public Nationalite update(
-            @PathVariable Long id,
-            @RequestBody Nationalite nationalite) {
-
+    public ResponseEntity<Nationalite> update(@PathVariable Long id, @RequestBody Nationalite nationalite) {
+        if (!nationaliteService.findById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
         nationalite.setId(id);
-        return repository.save(nationalite);
+        Nationalite updated = nationaliteService.save(nationalite);
+        return ResponseEntity.ok(updated);
     }
-
+ 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        repository.deleteById(id);
-    }
-
-    @GetMapping("/search")
-    public Page<Nationalite> search(
-            @RequestParam String libelle,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-
-        return repository.findByLibelleStartsWith(
-                libelle,
-                PageRequest.of(page, size));
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        if (!nationaliteService.findById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        nationaliteService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
+ 
+ 
