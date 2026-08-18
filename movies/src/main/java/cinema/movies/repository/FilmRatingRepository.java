@@ -36,3 +36,4 @@ public interface FilmRatingRepository extends CrudRepository<FilmRating, FilmRat
     Optional<FilmRating> findByPkFilmIdAndPkCustomerId(Long tourId, Long customerId);
 }
 
+

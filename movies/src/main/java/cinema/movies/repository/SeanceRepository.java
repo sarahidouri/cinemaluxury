@@ -19,3 +19,4 @@ import cinema.movies.model.Seance;
 public interface SeanceRepository extends JpaRepository<Seance, Long> {
 	List<Seance> findByDateProjection(@Temporal(TemporalType.DATE) Date dateProjection);
 }
+

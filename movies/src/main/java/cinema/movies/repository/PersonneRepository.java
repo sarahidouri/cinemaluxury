@@ -25,3 +25,4 @@ public interface PersonneRepository extends JpaRepository<Personne, Long> {
 	Page<Personne> findByNomContainingOrPrenomContaining(@RequestParam("nom") String nom,@RequestParam("prenom") String prenom, Pageable pageable);
 }
 
+

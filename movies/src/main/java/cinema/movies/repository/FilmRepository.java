@@ -14,3 +14,5 @@ import cinema.movies.model.Film;
 public interface FilmRepository extends JpaRepository<Film, Long> {
 
 }
+
+

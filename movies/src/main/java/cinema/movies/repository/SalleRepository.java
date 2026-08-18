@@ -11,3 +11,4 @@ import cinema.movies.model.Salle;
 public interface SalleRepository extends JpaRepository<Salle, Long> {
 
 }
+

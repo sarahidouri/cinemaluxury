@@ -11,3 +11,4 @@ import cinema.movies.model.Media;
 public interface MediaRepository extends JpaRepository<Media, Long> {
 
 }
+

@@ -11,3 +11,4 @@ import cinema.movies.model.Genre;
 public interface GenreRepository extends JpaRepository<Genre, Long> {
 
 }
+

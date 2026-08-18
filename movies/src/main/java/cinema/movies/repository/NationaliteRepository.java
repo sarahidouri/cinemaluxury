@@ -14,3 +14,4 @@ import cinema.movies.model.Nationalite;
 public interface NationaliteRepository extends JpaRepository<Nationalite, Long> {
 	Page<Nationalite> findByLibelleStartsWith(@RequestParam("libelle") String libelle, Pageable pageable);
 }
+
