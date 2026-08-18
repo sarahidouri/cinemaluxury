@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
