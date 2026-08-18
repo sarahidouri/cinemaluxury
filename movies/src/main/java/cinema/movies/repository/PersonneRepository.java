@@ -2,7 +2,7 @@ package cinema.movies.repository;
 
 
 
-import java.sql.Date;
+import java.sql.Date; 
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,13 +12,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import cinema.movies.dto.InlinePersonne;
+//import cinema.movies.dto.InlinePersonne;
 import cinema.movies.model.Personne;
 import cinema.movies.model.Personne.TypePersonne;
 
 @CrossOrigin("http://localhost:4200")
 @Repository
-@RepositoryRestResource(excerptProjection = InlinePersonne.class)
+//@RepositoryRestResource(excerptProjection = InlinePersonne.class)
+@RepositoryRestResource
 public interface PersonneRepository extends JpaRepository<Personne, Long> {
 	Page<Personne> findByTypePersonne(@RequestParam("typePersonne") TypePersonne typePersonne, Pageable pageable);
 	Page<Personne> findByDateNaissanceGreaterThanEqual(@RequestParam("dateNs") Date dateNs, Pageable pageable);
