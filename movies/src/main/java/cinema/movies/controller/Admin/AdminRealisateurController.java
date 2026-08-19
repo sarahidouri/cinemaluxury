@@ -15,44 +15,45 @@ import org.springframework.web.bind.annotation.RestController;
 import cinema.movies.model.Personne;
 import cinema.movies.service.PersonneService;
 
+
 @RestController
-@RequestMapping("/admin/acteurs")
+@RequestMapping("/admin/realisateurs")
 @CrossOrigin(origins = "http://localhost:4200")
-public class AdminActeurController {
+public class AdminRealisateurController {
 
     private final PersonneService personneService;
 
-    public AdminActeurController(PersonneService personneService) {
+    public AdminRealisateurController(PersonneService personneService) {
         this.personneService = personneService;
     }
 
     @GetMapping
-    public List<Personne> getAllActeurs() {
+    public List<Personne> getAllRealisateurs() {
         return personneService.getListAll();
     }
 
     @GetMapping("/{id}")
-    public Personne getActeurById(@PathVariable Long id) {
+    public Personne getRealisateurById(@PathVariable Long id) {
         return personneService.get(id);
     }
 
     @PostMapping
-    public Personne createActeur(@RequestBody Personne acteur) {
-        return personneService.save(acteur);
+    public Personne createRealisateur(@RequestBody Personne realisateur) {
+        return personneService.save(realisateur);
     }
 
     @PutMapping("/{id}")
-    public Personne updateActeur(@PathVariable Long id,
-                                 @RequestBody Personne acteur) {
+    public Personne updateRealisateur(@PathVariable Long id,
+                                      @RequestBody Personne realisateur) {
 
-        acteur.setId(id);
-        personneService.update(acteur);
+        realisateur.setId(id);
+        personneService.update(realisateur);
 
         return personneService.get(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteActeur(@PathVariable Long id) {
+    public void deleteRealisateur(@PathVariable Long id) {
         personneService.delete(id);
     }
 }
