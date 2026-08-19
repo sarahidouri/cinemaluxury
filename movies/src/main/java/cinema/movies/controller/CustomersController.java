@@ -1,12 +1,13 @@
 package cinema.movies.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.*;
 
+import cinema.movies.dto.CustomersDTO;
 import cinema.movies.model.Customers;
 import cinema.movies.service.CustomerService;
-
 
 @RestController
 @RequestMapping("/api/customers")
@@ -20,33 +21,62 @@ public class CustomersController {
     }
 
     @GetMapping
-    public List<Customers> getAllCustomers() {
-        return customerService.getListAll();
+    public List<CustomersDTO> getAllCustomers() {
+        return customerService.getListAll()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public Customers getCustomerById(@PathVariable Long id) {
-        return customerService.get(id);
+    public CustomersDTO getCustomerById(@PathVariable Long id) {
+        return toDTO(customerService.get(id));
     }
 
     @PostMapping
-    public Customers createCustomer(@RequestBody Customers customer) {
-        return customerService.save(customer);
+    public CustomersDTO createCustomer(@RequestBody CustomersDTO dto) {
+
+        Customers customer = toEntity(dto);
+
+        return toDTO(customerService.save(customer));
     }
 
     @PutMapping("/{id}")
-    public Customers updateCustomer(
+    public CustomersDTO updateCustomer(
             @PathVariable Long id,
-            @RequestBody Customers customer) {
+            @RequestBody CustomersDTO dto) {
 
+        Customers customer = toEntity(dto);
         customer.setId(id);
+
         customerService.update(customer);
 
-        return customerService.get(id);
+        return toDTO(customerService.get(id));
     }
 
     @DeleteMapping("/{id}")
     public void deleteCustomer(@PathVariable Long id) {
         customerService.delete(id);
+    }
+
+    private CustomersDTO toDTO(Customers customer) {
+    	return new CustomersDTO(
+    			customer.getId(), 
+    			customer.getFirstname(), 
+    			customer.getLastname(), 
+    			customer.getEmail(), 
+    			customer.getAddedDate());
+         
+    }
+
+    private Customers toEntity(CustomersDTO dto) {
+        Customers customer = new Customers();
+
+        customer.setId(dto.getId());
+        customer.setFirstname(dto.getFirstname());
+        customer.setLastname(dto.getLastname());
+        customer.setEmail(dto.getEmail());
+
+        return customer;
     }
 }

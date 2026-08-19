@@ -1,9 +1,11 @@
 package cinema.movies.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.*;
 
+import cinema.movies.dto.SalleDTO;
 import cinema.movies.model.Salle;
 import cinema.movies.service.SalleService;
 
@@ -19,33 +21,62 @@ public class SalleController {
     }
 
     @GetMapping
-    public List<Salle> getAllSalles() {
-        return salleService.getListAll();
+    public List<SalleDTO> getAllSalles() {
+        return salleService.getListAll()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public Salle getSalleById(@PathVariable Long id) {
-        return salleService.get(id);
+    public SalleDTO getSalleById(@PathVariable Long id) {
+        return toDTO(salleService.get(id));
     }
 
     @PostMapping
-    public Salle createSalle(@RequestBody Salle salle) {
-        return salleService.save(salle);
+    public SalleDTO createSalle(@RequestBody SalleDTO dto) {
+
+        Salle salle = toEntity(dto);
+
+        return toDTO(salleService.save(salle));
     }
 
     @PutMapping("/{id}")
-    public Salle updateSalle(
+    public SalleDTO updateSalle(
             @PathVariable Long id,
-            @RequestBody Salle salle) {
+            @RequestBody SalleDTO dto) {
 
+        Salle salle = toEntity(dto);
         salle.setId(id);
+
         salleService.update(salle);
 
-        return salleService.get(id);
+        return toDTO(salleService.get(id));
     }
 
     @DeleteMapping("/{id}")
     public void deleteSalle(@PathVariable Long id) {
         salleService.delete(id);
+    }
+
+    private SalleDTO toDTO(Salle salle) {
+
+        return new SalleDTO(
+                salle.getId(),
+                salle.getNumero(),
+                salle.getCapacite(),
+                salle.getAddedDate()
+        );
+    }
+
+    private Salle toEntity(SalleDTO dto) {
+
+        Salle salle = new Salle();
+
+        salle.setId(dto.getId());
+        salle.setNumero(dto.getNumero());
+        salle.setCapacite(dto.getCapacite());
+
+        return salle;
     }
 }

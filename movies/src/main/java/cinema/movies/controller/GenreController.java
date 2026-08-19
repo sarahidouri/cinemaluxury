@@ -1,9 +1,11 @@
 package cinema.movies.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.*;
 
+import cinema.movies.dto.GenreDTO;
 import cinema.movies.model.Genre;
 import cinema.movies.service.GenreService;
 
@@ -19,33 +21,58 @@ public class GenreController {
     }
 
     @GetMapping
-    public List<Genre> getAllGenres() {
-        return genreService.getListAll();
+    public List<GenreDTO> getAllGenres() {
+        return genreService.getListAll()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public Genre getGenreById(@PathVariable Long id) {
-        return genreService.get(id);
+    public GenreDTO getGenreById(@PathVariable Long id) {
+        return toDTO(genreService.get(id));
     }
 
     @PostMapping
-    public Genre createGenre(@RequestBody Genre genre) {
-        return genreService.save(genre);
+    public GenreDTO createGenre(@RequestBody GenreDTO dto) {
+
+        Genre genre = toEntity(dto);
+
+        return toDTO(genreService.save(genre));
     }
 
     @PutMapping("/{id}")
-    public Genre updateGenre(
+    public GenreDTO updateGenre(
             @PathVariable Long id,
-            @RequestBody Genre genre) {
+            @RequestBody GenreDTO dto) {
 
+        Genre genre = toEntity(dto);
         genre.setId(id);
+
         genreService.update(genre);
 
-        return genreService.get(id);
+        return toDTO(genreService.get(id));
     }
 
     @DeleteMapping("/{id}")
     public void deleteGenre(@PathVariable Long id) {
         genreService.delete(id);
+    }
+
+    private GenreDTO toDTO(Genre genre) {
+        return new GenreDTO(
+                genre.getId(),
+                genre.getLibelle()
+        );
+    }
+
+    private Genre toEntity(GenreDTO dto) {
+
+        Genre genre = new Genre();
+
+        genre.setId(dto.getId());
+        genre.setLibelle(dto.getLibelle());
+
+        return genre;
     }
 }
