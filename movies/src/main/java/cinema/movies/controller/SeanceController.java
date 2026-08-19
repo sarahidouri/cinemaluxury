@@ -1,104 +1,51 @@
 package cinema.movies.controller;
-	 
-	import cinema.movies.model.Seance;
 
-	import cinema.movies.service.SeanceService;
+import java.util.List;
 
-	import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-	import org.springframework.web.bind.annotation.*;
-	 
-	import java.util.List;
-	 
-	@RestController
+import cinema.movies.model.Seance;
+import cinema.movies.service.SeanceService;
 
-	@RequestMapping("/api/seances")
+@RestController
+@RequestMapping("/api/seances")
+@CrossOrigin(origins = "http://localhost:4200")
+public class SeanceController {
 
-	@CrossOrigin(origins = "http://localhost:4200")
+    private final SeanceService seanceService;
 
-	public class SeanceController {
-	 
-	    private final SeanceService seanceService;
-	 
-	    public SeanceController(SeanceService seanceService) {
+    public SeanceController(SeanceService seanceService) {
+        this.seanceService = seanceService;
+    }
 
-	        this.seanceService = seanceService;
+    @GetMapping
+    public List<Seance> getAllSeances() {
+        return seanceService.getListAll();
+    }
 
-	    }
-	 
-	    @GetMapping
+    @GetMapping("/{id}")
+    public Seance getSeanceById(@PathVariable Long id) {
+        return seanceService.get(id);
+    }
 
-	    public List<Seance> getAllSeances() {
+    @PostMapping
+    public Seance createSeance(@RequestBody Seance seance) {
+        return seanceService.save(seance);
+    }
 
-	        return seanceService.findAll();
+    @PutMapping("/{id}")
+    public Seance updateSeance(
+            @PathVariable Long id,
+            @RequestBody Seance seance) {
 
-	    }
-	 
-	    @GetMapping("/{id}")
+        seance.setId(id);
+        seanceService.update(seance);
 
-	    public ResponseEntity<Seance> getSeanceById(
+        return seanceService.get(id);
+    }
 
-	            @PathVariable Long id) {
-	 
-	        return seanceService.findById(id)
-
-	                .map(ResponseEntity::ok)
-
-	                .orElse(ResponseEntity.notFound().build());
-
-	    }
-	 
-	    @PostMapping
-
-	    public Seance createSeance(@RequestBody Seance seance) {
-
-	        return seanceService.save(seance);
-
-	    }
-	 
-	    @PutMapping("/{id}")
-
-	    public ResponseEntity<Seance> updateSeance(
-
-	            @PathVariable Long id,
-
-	            @RequestBody Seance seance) {
-	 
-	        return seanceService.findById(id)
-
-	                .map(existingSeance -> {
-
-	                    seance.setId(id);
-
-	                    return ResponseEntity.ok(
-
-	                            seanceService.save(seance)
-
-	                    );
-
-	                })
-
-	                .orElse(ResponseEntity.notFound().build());
-
-	    }
-	 
-	    @DeleteMapping("/{id}")
-
-	    public ResponseEntity<Void> deleteSeance(
-
-	            @PathVariable Long id) {
-	 
-	        if (seanceService.findById(id).isEmpty()) {
-
-	            return ResponseEntity.notFound().build();
-
-	        }
-	 
-	        seanceService.deleteById(id);
-
-	        return ResponseEntity.noContent().build();
-
-	    }
-
-	}
-	 
+    @DeleteMapping("/{id}")
+    public void deleteSeance(@PathVariable Long id) {
+        seanceService.delete(id);
+    }
+}

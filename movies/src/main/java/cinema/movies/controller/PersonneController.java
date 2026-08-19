@@ -1,104 +1,51 @@
 package cinema.movies.controller;
-	 
-	import cinema.movies.model.Personne;
 
-	import cinema.movies.service.PersonneService;
+import java.util.List;
 
-	import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-	import org.springframework.web.bind.annotation.*;
-	 
-	import java.util.List;
-	 
-	@RestController
+import cinema.movies.model.Personne;
+import cinema.movies.service.PersonneService;
 
-	@RequestMapping("/api/personnes")
+@RestController
+@RequestMapping("/api/personnes")
+@CrossOrigin(origins = "http://localhost:4200")
+public class PersonneController {
 
-	@CrossOrigin(origins = "http://localhost:4200")
+    private final PersonneService personneService;
 
-	public class PersonneController {
-	 
-	    private final PersonneService personneService;
-	 
-	    public PersonneController(PersonneService personneService) {
+    public PersonneController(PersonneService personneService) {
+        this.personneService = personneService;
+    }
 
-	        this.personneService = personneService;
+    @GetMapping
+    public List<Personne> getAllPersonnes() {
+        return personneService.getListAll();
+    }
 
-	    }
-	 
-	    @GetMapping
+    @GetMapping("/{id}")
+    public Personne getPersonneById(@PathVariable Long id) {
+        return personneService.get(id);
+    }
 
-	    public List<Personne> getAllPersonnes() {
+    @PostMapping
+    public Personne createPersonne(@RequestBody Personne personne) {
+        return personneService.save(personne);
+    }
 
-	        return personneService.findAll();
+    @PutMapping("/{id}")
+    public Personne updatePersonne(
+            @PathVariable Long id,
+            @RequestBody Personne personne) {
 
-	    }
-	 
-	    @GetMapping("/{id}")
+        personne.setId(id);
+        personneService.update(personne);
 
-	    public ResponseEntity<Personne> getPersonneById(
+        return personneService.get(id);
+    }
 
-	            @PathVariable Long id) {
-	 
-	        return personneService.findById(id)
-
-	                .map(ResponseEntity::ok)
-
-	                .orElse(ResponseEntity.notFound().build());
-
-	    }
-	 
-	    @PostMapping
-
-	    public Personne createPersonne(@RequestBody Personne personne) {
-
-	        return personneService.save(personne);
-
-	    }
-	 
-	    @PutMapping("/{id}")
-
-	    public ResponseEntity<Personne> updatePersonne(
-
-	            @PathVariable Long id,
-
-	            @RequestBody Personne personne) {
-	 
-	        return personneService.findById(id)
-
-	                .map(existingPersonne -> {
-
-	                    personne.setId(id);
-
-	                    return ResponseEntity.ok(
-
-	                            personneService.save(personne)
-
-	                    );
-
-	                })
-
-	                .orElse(ResponseEntity.notFound().build());
-
-	    }
-	 
-	    @DeleteMapping("/{id}")
-
-	    public ResponseEntity<Void> deletePersonne(
-
-	            @PathVariable Long id) {
-	 
-	        if (personneService.findById(id).isEmpty()) {
-
-	            return ResponseEntity.notFound().build();
-
-	        }
-	 
-	        personneService.deleteById(id);
-
-	        return ResponseEntity.noContent().build();
-
-	    }
-
-	}
-	 
+    @DeleteMapping("/{id}")
+    public void deletePersonne(@PathVariable Long id) {
+        personneService.delete(id);
+    }
+}

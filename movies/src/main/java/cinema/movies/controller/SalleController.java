@@ -1,100 +1,51 @@
 package cinema.movies.controller;
-	 
-	import cinema.movies.model.Salle;
 
-	import cinema.movies.service.SalleService;
+import java.util.List;
 
-	import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-	import org.springframework.web.bind.annotation.*;
-	 
-	import java.util.List;
-	 
-	@RestController
+import cinema.movies.model.Salle;
+import cinema.movies.service.SalleService;
 
-	@RequestMapping("/api/salles")
+@RestController
+@RequestMapping("/api/salles")
+@CrossOrigin(origins = "http://localhost:4200")
+public class SalleController {
 
-	@CrossOrigin(origins = "http://localhost:4200")
+    private final SalleService salleService;
 
-	public class SalleController {
-	 
-	    private final SalleService salleService;
-	 
-	    public SalleController(SalleService salleService) {
+    public SalleController(SalleService salleService) {
+        this.salleService = salleService;
+    }
 
-	        this.salleService = salleService;
+    @GetMapping
+    public List<Salle> getAllSalles() {
+        return salleService.getListAll();
+    }
 
-	    }
-	 
-	    @GetMapping
+    @GetMapping("/{id}")
+    public Salle getSalleById(@PathVariable Long id) {
+        return salleService.get(id);
+    }
 
-	    public List<Salle> getAllSalles() {
+    @PostMapping
+    public Salle createSalle(@RequestBody Salle salle) {
+        return salleService.save(salle);
+    }
 
-	        return salleService.findAll();
+    @PutMapping("/{id}")
+    public Salle updateSalle(
+            @PathVariable Long id,
+            @RequestBody Salle salle) {
 
-	    }
-	 
-	    @GetMapping("/{id}")
+        salle.setId(id);
+        salleService.update(salle);
 
-	    public ResponseEntity<Salle> getSalleById(@PathVariable Long id) {
+        return salleService.get(id);
+    }
 
-	        return salleService.findById(id)
-
-	                .map(ResponseEntity::ok)
-
-	                .orElse(ResponseEntity.notFound().build());
-
-	    }
-	 
-	    @PostMapping
-
-	    public Salle createSalle(@RequestBody Salle salle) {
-
-	        return salleService.save(salle);
-
-	    }
-	 
-	    @PutMapping("/{id}")
-
-	    public ResponseEntity<Salle> updateSalle(
-
-	            @PathVariable Long id,
-
-	            @RequestBody Salle salle) {
-	 
-	        return salleService.findById(id)
-
-	                .map(existingSalle -> {
-
-	                    salle.setId(id);
-
-	                    return ResponseEntity.ok(
-
-	                            salleService.save(salle)
-
-	                    );
-
-	                })
-
-	                .orElse(ResponseEntity.notFound().build());
-
-	    }
-	 
-	    @DeleteMapping("/{id}")
-
-	    public ResponseEntity<Void> deleteSalle(@PathVariable Long id) {
-	 
-	        if (salleService.findById(id).isEmpty()) {
-
-	            return ResponseEntity.notFound().build();
-
-	        }
-	 
-	        salleService.deleteById(id);
-
-	        return ResponseEntity.noContent().build();
-
-	    }
-
-	}
-	 
+    @DeleteMapping("/{id}")
+    public void deleteSalle(@PathVariable Long id) {
+        salleService.delete(id);
+    }
+}
