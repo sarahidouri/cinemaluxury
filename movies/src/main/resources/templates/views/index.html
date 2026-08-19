@@ -1,569 +1,63 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>CINIMALUXURY - Dashboard</title>
-
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-
-    <link th:href="@{/css/font-awesome.css}" rel="stylesheet">
-
-    <link th:href="@{/css/style.css}" rel="stylesheet">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CINIMALUXURY Dashboard</title>
 </head>
 
 <body>
 
-<!-- ================= SIDEBAR ================= -->
+    <h1>CINIMALUXURY Dashboard</h1>
 
-<div class="sidebar">
+    <p>
+        Welcome <span th:text="${username}">Admin</span>
+    </p>
 
-    <!-- Logo -->
+    <h2>Statistics</h2>
 
-    <div class="sidebar-header">
-
-        <h4>
-            <i class="fa fa-film"></i>
-            CINIMALUXURY
-        </h4>
-
-    </div>
-
-    <!-- User -->
-
-    <div class="user-profile">
-
-        <img th:src="@{/images/user.png}"
-             alt="User"
-             class="user-image">
-
-        <h6 th:text="${username}">
-            Admin
-        </h6>
-
-        <small>
-            Administrator
-        </small>
-
-    </div>
-
-    <!-- Menu -->
-
-    <ul class="sidebar-menu">
-
-        <li class="active">
-
-            <a th:href="@{/}">
-
-                <i class="fa fa-dashboard"></i>
-
-                <span>Dashboard</span>
-
-            </a>
-
+    <ul>
+        <li>
+            Films:
+            <span th:text="${filmCount}">0</span>
         </li>
 
         <li>
-
-            <a th:href="@{/salles}">
-
-                <i class="fa fa-building"></i>
-
-                <span>Salles</span>
-
-            </a>
-
+            Salles:
+            <span th:text="${salleCount}">0</span>
         </li>
 
         <li>
-
-            <a th:href="@{/personnes}">
-
-                <i class="fa fa-users"></i>
-
-                <span>Acteurs</span>
-
-            </a>
-
+            Séances:
+            <span th:text="${seanceCount}">0</span>
         </li>
 
         <li>
-
-            <a th:href="@{/films}">
-
-                <i class="fa fa-film"></i>
-
-                <span>Films</span>
-
-            </a>
-
+            Users:
+            <span th:text="${userCount}">0</span>
         </li>
-
-        <li>
-
-            <a th:href="@{/seances}">
-
-                <i class="fa fa-calendar"></i>
-
-                <span>Séances</span>
-
-            </a>
-
-        </li>
-
-        <li>
-
-            <a th:href="@{/users}">
-
-                <i class="fa fa-user"></i>
-
-                <span>Users</span>
-
-            </a>
-
-        </li>
-
-        <li>
-
-            <a th:href="@{/contact}">
-
-                <i class="fa fa-envelope"></i>
-
-                <span>Contact</span>
-
-            </a>
-
-        </li>
-
     </ul>
 
-    <!-- Logout -->
-
-    <div class="sidebar-footer">
-
-        <a th:href="@{/logout}">
-
-            <i class="fa fa-sign-out"></i>
-
-            Déconnexion
-
-        </a>
-
-    </div>
-
-</div>
-
-
-<!-- ================= MAIN CONTENT ================= -->
-
-<div class="main-content">
-
-    <!-- ================= HEADER ================= -->
-
-    <nav class="top-navbar">
-
-        <div class="container-fluid">
-
-            <div class="row align-items-center">
-
-                <!-- Navigation -->
-
-                <div class="col-md-8">
-
-                    <ul class="top-menu">
-
-                        <li>
-
-                            <a th:href="@{/index}">
-
-                                <i class="fa fa-home"></i>
-
-                                Home
-
-                            </a>
-
-                        </li>
-
-                        <li>
-
-                            <a th:href="@{/contact}">
-
-                                <i class="fa fa-envelope"></i>
-
-                                Contact
-
-                            </a>
-
-                        </li>
-
-                    </ul>
-
-                </div>
-
-                <!-- Search -->
-
-                <div class="col-md-4">
-
-                    <form th:action="@{/search}"
-                          method="get"
-                          class="search-form">
-
-                        <div class="input-group">
-
-                            <input type="text"
-                                   name="query"
-                                   class="form-control"
-                                   placeholder="Rechercher...">
-
-                            <button class="btn btn-primary"
-                                    type="submit">
-
-                                <i class="fa fa-search"></i>
-
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </nav>
-
-
-    <!-- ================= DASHBOARD ================= -->
-
-    <div class="container-fluid dashboard-content">
-
-        <!-- Welcome -->
-
-        <div class="welcome-section">
-
-            <h2>
-
-                Bonjour,
-
-                <span th:text="${username}">
-                    Admin
-                </span>
-
-            </h2>
-
-            <p>
-                Bienvenue dans votre espace de gestion du cinéma.
-            </p>
-
-        </div>
-
-
-        <!-- ================= STATISTICS ================= -->
-
-        <div class="row">
-
-            <!-- Films -->
-
-            <div class="col-lg-3 col-md-6 mb-4">
-
-                <div class="dashboard-card bg-primary">
-
-                    <div class="card-icon">
-
-                        <i class="fa fa-film"></i>
-
-                    </div>
-
-                    <div class="card-content">
-
-                        <h3 th:text="${filmCount}">
-                            0
-                        </h3>
-
-                        <p>
-                            Films
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- Salles -->
-
-            <div class="col-lg-3 col-md-6 mb-4">
-
-                <div class="dashboard-card bg-success">
-
-                    <div class="card-icon">
-
-                        <i class="fa fa-building"></i>
-
-                    </div>
-
-                    <div class="card-content">
-
-                        <h3 th:text="${salleCount}">
-                            0
-                        </h3>
-
-                        <p>
-                            Salles
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- Séances -->
-
-            <div class="col-lg-3 col-md-6 mb-4">
-
-                <div class="dashboard-card bg-warning">
-
-                    <div class="card-icon">
-
-                        <i class="fa fa-calendar"></i>
-
-                    </div>
-
-                    <div class="card-content">
-
-                        <h3 th:text="${seanceCount}">
-                            0
-                        </h3>
-
-                        <p>
-                            Séances
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- Users -->
-
-            <div class="col-lg-3 col-md-6 mb-4">
-
-                <div class="dashboard-card bg-danger">
-
-                    <div class="card-icon">
-
-                        <i class="fa fa-users"></i>
-
-                    </div>
-
-                    <div class="card-content">
-
-                        <h3 th:text="${userCount}">
-                            0
-                        </h3>
-
-                        <p>
-                            Users
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- ================= QUICK ACCESS ================= -->
-
-        <div class="row mt-4">
-
-            <!-- Gestion -->
-
-            <div class="col-md-8">
-
-                <div class="card shadow">
-
-                    <div class="card-header">
-
-                        <h5>
-
-                            <i class="fa fa-film"></i>
-
-                            Gestion du cinéma
-
-                        </h5>
-
-                    </div>
-
-                    <div class="card-body">
-
-                        <p>
-
-                            Depuis votre tableau de bord,
-                            vous pouvez gérer les films,
-                            les acteurs, les salles et
-                            les séances du cinéma.
-
-                        </p>
-
-                        <div class="row">
-
-                            <div class="col-md-4 mb-3">
-
-                                <a th:href="@{/films}"
-                                   class="btn btn-primary w-100">
-
-                                    <i class="fa fa-film"></i>
-
-                                    Films
-
-                                </a>
-
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-
-                                <a th:href="@{/personnes}"
-                                   class="btn btn-success w-100">
-
-                                    <i class="fa fa-users"></i>
-
-                                    Acteurs
-
-                                </a>
-
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-
-                                <a th:href="@{/seances}"
-                                   class="btn btn-warning w-100">
-
-                                    <i class="fa fa-calendar"></i>
-
-                                    Séances
-
-                                </a>
-
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-
-                                <a th:href="@{/salles}"
-                                   class="btn btn-info w-100">
-
-                                    <i class="fa fa-building"></i>
-
-                                    Salles
-
-                                </a>
-
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-
-                                <a th:href="@{/users}"
-                                   class="btn btn-danger w-100">
-
-                                    <i class="fa fa-user"></i>
-
-                                    Users
-
-                                </a>
-
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-
-                                <a th:href="@{/contact}"
-                                   class="btn btn-secondary w-100">
-
-                                    <i class="fa fa-envelope"></i>
-
-                                    Contact
-
-                                </a>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- User information -->
-
-            <div class="col-md-4">
-
-                <div class="card shadow">
-
-                    <div class="card-header">
-
-                        <h5>
-
-                            <i class="fa fa-user"></i>
-
-                            Mon profil
-
-                        </h5>
-
-                    </div>
-
-                    <div class="card-body text-center">
-
-                        <img th:src="@{/images/user.png}"
-                             alt="User"
-                             class="profile-image">
-
-                        <h5 class="mt-3"
-                            th:text="${username}">
-
-                            Admin
-
-                        </h5>
-
-                        <p class="text-muted">
-
-                            Administrateur
-
-                        </p>
-
-                        <a th:href="@{/users/profile}"
-                           class="btn btn-outline-primary">
-
-                            Voir mon profil
-
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
+    <h2>API Links</h2>
+
+    <ul>
+        <li>
+            <a th:href="@{/api/films}">Films</a>
+        </li>
+
+        <li>
+            <a th:href="@{/api/genres}">Genres</a>
+        </li>
+
+        <li>
+            <a th:href="@{/api/personnes}">Personnes</a>
+        </li>
+
+        <li>
+            <a th:href="@{/api/seances}">Séances</a>
+        </li>
+    </ul>
 
 </body>
 

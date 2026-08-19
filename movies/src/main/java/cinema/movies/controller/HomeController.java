@@ -28,7 +28,7 @@ public class HomeController {
 
         model.addAttribute("userCount", 0);
 
-        return "index";
+        return "views/index";
     }
 
     @GetMapping("/index")
